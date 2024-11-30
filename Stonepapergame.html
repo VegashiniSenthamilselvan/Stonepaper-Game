@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            background-image: url('bc3.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: white;
+        }
+        #opponent-choice {
+            width: 240px;
+            height: 240px;
+            margin-top: 10px;
+        }
+        #your-choice {
+            width: 240px;
+            height: 240px;
+            margin-top: 10px;
+        }
+        #choices {
+            width: 340px;
+            height: 80px;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+        #choices img {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        #choices img:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+        }
+        #result {
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #007bff;
+        }
+        #reset-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="opponent-score">0</h1>
+    <img id="opponent-choice" src="placeholder.png" alt="Opponent's choice, not yet selected">
+    <br>
+    <img id="your-choice" src="placeholder.png" alt="Your choice, not yet selected">
+    <div id="choices">
+        <img id="rock" src="st1.jpg" alt="Rock">
+        <img id="paper" src="paper1.jpg" alt="Paper">
+        <img id="scissors" src="sc1.jpg" alt="Scissors">
+    </div>
+    <h1 id="your-score">0</h1>
+    <div id="result"></div>
+    <button id="reset-btn" onclick="resetGame()">Reset Game</button>
+
+    <script>
+        var you;
+        var yourScore = 0;
+        var opponent;
+        var opponentScore = 0;
+
+        var choices = ["rock", "paper", "scissors"];
+        var images = {
+            "rock": "st1.jpg",
+            "paper": "paper1.jpg",
+            "scissors": "sc1.jpg"
+        };
+
+        window.onload = function() {
+            let choiceElements = document.querySelectorAll("#choices img");
+            choiceElements.forEach(choice => {
+                choice.addEventListener("click", selectChoice);
+            });
+        }
+
+        function selectChoice() {
+            you = this.id;
+            document.getElementById("your-choice").src = images[you];
+
+            opponent = choices[Math.floor(Math.random() * 3)];
+            document.getElementById("opponent-choice").src = images[opponent];
+
+            let resultMessage;
+            let resultColor;
+            if (you === opponent) {
+                yourScore += 1;
+                opponentScore += 1;
+                resultMessage = "It's a tie!";
+                resultColor = "#ffc107"; // Yellow for tie
+            } else {
+                if ((you === "rock" && opponent === "scissors") ||
+                    (you === "scissors" && opponent === "paper") ||
+                    (you === "paper" && opponent === "rock")) {
+                    yourScore += 1;
+                    resultMessage = "You win this round!";
+                    resultColor = "#28a745"; // Green for win
+                } else {
+                    opponentScore += 1;
+                    resultMessage = "You lose this round!";
+                    resultColor = "#dc3545"; // Red for loss
+                }
+            }
+
+            document.getElementById("your-score").innerText = yourScore;
+            document.getElementById("opponent-score").innerText = opponentScore;
+            document.getElementById("result").innerText = resultMessage;
+            document.getElementById("result").style.color = resultColor;
+        }
+
+        function resetGame() {
+            yourScore = 0;
+            opponentScore = 0;
+            document.getElementById("your-score").innerText = yourScore;
+            document.getElementById("opponent-score").innerText = opponentScore;
+            document.getElementById("your-choice").src = "placeholder.png";
+            document.getElementById("opponent-choice").src = "placeholder.png";
+            document.getElementById("result").innerText = "";
+        }
+    </script>
+</body>
+</html>
